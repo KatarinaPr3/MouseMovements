@@ -1,0 +1,63 @@
+﻿<Window x:Class="MouseMovements.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ViewModel="clr-namespace:MouseMovements.ViewModel"
+        xmlns:ii="http://schemas.microsoft.com/xaml/behaviors"
+
+        xmlns:local="clr-namespace:MouseMovements"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800" WindowState="Maximized" ResizeMode="NoResize" ScrollViewer.VerticalScrollBarVisibility="Disabled" WindowStyle="None">
+    <Window.DataContext>
+        <ViewModel:MainWindowViewModel/>
+    </Window.DataContext>
+    <ii:Interaction.Triggers>
+        <ii:EventTrigger EventName="MouseMove">
+            <ii:InvokeCommandAction Command="{Binding MouseMoving}" />
+        </ii:EventTrigger>
+    </ii:Interaction.Triggers>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="5*"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.RowSpan="2" Visibility="{Binding EnterVisibility, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="300px" Height="150" Orientation="Vertical" Grid.ColumnSpan="2">
+            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">Insert Name</TextBlock>
+            <TextBox  Height="50" Padding="5" VerticalContentAlignment="Center" Margin="0 20 0 0" Text="{Binding NameOfUser, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"></TextBox>
+            <Button Content="Submit" Height="30" Width="70" Margin="0 10" Background="White" BorderThickness="2" BorderBrush="Black" Command="{Binding InsertName}"></Button>
+        </StackPanel>
+
+        <StackPanel Visibility="{Binding ShowMainUserControl, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Orientation="Vertical">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                
+                <TextBlock Grid.Row="0" Grid.Column="0">X:</TextBlock>
+                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding CurrentPointerX, NotifyOnTargetUpdated=True, Mode=TwoWay}"/>
+                <TextBlock Grid.Row="1" Grid.Column="0">Y:</TextBlock>
+                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding CurrentPointerY, NotifyOnTargetUpdated=True, Mode=TwoWay}"/>
+
+            </Grid>
+            <Canvas>
+                <Button Command="{Binding ClickButton}" Width="{Binding Width, NotifyOnTargetUpdated=True, Mode=TwoWay}" Height="{Binding Height, NotifyOnTargetUpdated=True, Mode=TwoWay}"  Background="Red"
+               Canvas.Top="{Binding CurrentPositionY, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Canvas.Left="{Binding CurrentPositionX, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+            </Canvas>
+        </StackPanel>
+        <StackPanel Visibility="{Binding ShowMainUserControl, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
+            <Button Content="Start recording" Width="110" Height="40" Margin="10 0" Command="{Binding StartRecording}"/>
+            <Button Content="Stop" Width="110" Height="40" Margin="10 0" Command="{Binding StopRecording}"/>
+            <Button Content="Playback" Width="110" Height="40" Margin="10 0" Command="{Binding PlayLastSaved}"/>
+            <Button Content="Get Random" Width="110" Height="40" Margin="10 0" Command="{Binding GetRandom}"/>
+            <Button Content="Test" Width="110" Height="40" Margin="10 0" Command="{Binding Test}"/>
+
+        </StackPanel>
+    </Grid>
+</Window>
